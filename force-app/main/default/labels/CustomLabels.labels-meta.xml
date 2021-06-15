@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>PHX_Select_Valid_Primary_secondary_coverage</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Select Valid Primary secondary coverage</shortDescription>
+        <value>Program Coverage Record and Health Plan do not match</value>
+    </labels>
+        <labels>
+        <fullName>PHX_PA_Req_Error_Msg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>PHX_PA_Req_Error_Msg</shortDescription>
+        <value>One or more required field is missing. Please review and update before saving in the next status: PA Required</value>
+    </labels>
+    <labels>
+        <fullName>PHX_Restrict_ClaimCase</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>PHX_Restrict_ClaimCase_Association</shortDescription>
+        <value>Select a Claim Case associated with the Program Case.</value>
+    </labels>
+</CustomLabels>
