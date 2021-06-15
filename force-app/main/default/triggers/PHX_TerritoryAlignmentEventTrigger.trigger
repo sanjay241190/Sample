@@ -9,7 +9,7 @@
  * 
  * *********************************************************************************************************/
 
-trigger PHX_TerritoryAlignmentEventTrigger on PHX_TerritoryAlignmentEvent__e (after insert) {
+trigger PHX_TerritoryAlignmentEventTrigger on Account (after insert) {
     //Avoid execution of Trigger
    //Add code
 
