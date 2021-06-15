@@ -1,5 +1,5 @@
 /*********************************************************************************
-Class Name      : PHX_AssociationTriggerHelper 
+Class Name      : PHX_AssociationTriggerHelper .
 Description     : Helper class for PHX_AssociationTrigger trigger
 Created By      : Deloitte 
 Created Date    : 15-July-19
