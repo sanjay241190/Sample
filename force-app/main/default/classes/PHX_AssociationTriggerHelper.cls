@@ -10,7 +10,7 @@ Developer            Date                   Description
 -----------------------------------------------------------------------------------
 Ajinkya           15-July-19              Initial Version
 *********************************************************************************/
-public class PHX_AssociationTriggerHelper extends PHX_TriggerHandler {
+public class PHX_AssociationTriggerHelper {
     
    
 }
