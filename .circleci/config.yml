@@ -1,19 +1,49 @@
 version: 2.1
-  orbs:
-    apex: circleci/salesforce-apex@x.y
-  jobs:
-    install_authenticate:
-      docker:
-        - image: cimg/node:14.5
-      steps:
-        - checkout
-        - apex/setup:
-           defaultusername: sanjax90@gmail.com
-        - run:
-            name: Run your SFDX commands here
-            command: sfdx force:org:list
-              echo "You now have access to the sfdx cli and may execute commands against it. https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm"
-  workflows:
-    basic-test:
-      jobs:
-        - install_authenticate
+jobs: 
+  build: 
+    docker:
+      - image: circleci/node:lts
+    environment:
+      # Variables used in build steps
+      # from https://developer.salesforce.com/tools/sfdxcli
+      - DX_CLI_URL: https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+      - TESTLEVEL: RunLocalTests
+      - DEPLOYDIR: src
+    steps:
+      - checkout
+      - run:
+          name: "Create SFDX Folder" 
+          command: |
+            # Create sfdx directory
+            mkdir ~/sfdx
+      - run:
+          name: Download CLI
+          command: |
+            # Download cli
+            # By default, the script installs the current version of Salesforce CLI. To install the release candidate, set the DX_CLI_URL_CUSTOM local variable to the appropriate URL
+            wget -qO- ${DX_CLI_URL_CUSTOM-$DX_CLI_URL} | tar xJ -C ~/sfdx --strip-components 1
+      - run:
+          name: Install CLI
+          command: |
+            # Install the cli
+            export PATH=~/sfdx/bin:$PATH
+            echo "export PATH=~/sfdx/bin:$PATH" >> $BASH_ENV
+            sfdx
+      - run:
+          name: Decrypt server key
+          command: |
+            #Decrypt server key
+            openssl enc -nosalt -aes-256-cbc -d -in assets/server.key.enc -out assets/servers.pass.key -base64 -K $SFDX_JWT_KEY -iv $DECRYPTION_IV
+      - run:
+          name: Authorize Target Deployment Org
+          command: |
+            #Authorize target org
+            sfdx auth:jwt:grant --instanceurl $ENDPOINT  --clientid $SFDX_CONSUMER_KEY --jwtkeyfile assets/servers.pass.key --username $USER_NAME --setalias TEST
+      - run:
+          name: Deploy to Target Deployment Org
+          command: |
+            #Deploy to target deployment org and run unit tests. 
+            sfdx force:mdapi:deploy --wait 10 --deploydir $DEPLOYDIR --targetusername TEST --testlevel $TESTLEVEL
+            
+            #Example shows how to run a check only deploy.
+            #sfdx force:mdapi:deploy --checkonly --wait 10 --deploydir $DEPLOYDIR --targetusername UAT --testlevel $TESTLEVEL
